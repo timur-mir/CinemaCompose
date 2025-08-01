@@ -13,6 +13,7 @@ import home.product.home_impl.domain.usecase.PremieresUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,10 +26,10 @@ class MovieViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
     private val _premieresInfo = MutableStateFlow<PremieresList>(PremieresList(emptyList()))
-    val premieresInfo = _premieresInfo.asStateFlow()
+    val premieresInfo:StateFlow<PremieresList> = _premieresInfo.asStateFlow()
 
     init {
-        loadPremieres()
+       // loadPremieres()
     }
 fun loadPremieres() {
         downloader ?: viewModelScope.launch(Dispatchers.IO) {

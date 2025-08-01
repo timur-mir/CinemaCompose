@@ -1,9 +1,15 @@
 package home.product.skillcinema2.presentation
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -18,6 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -38,7 +48,24 @@ fun AppContent() {
             val tabs = remember { BottomTabs.values() }
             val navController = rememberNavController()
             Scaffold(
-                containerColor = backgroundWhite,
+                topBar= {
+                    TopAppBar(
+//                        modifier = Modifier.height(56.dp),
+                        title = { Text("Главная")},
+                        navigationIcon={ IconButton({ }) { Icon(Icons.Filled.Menu, contentDescription = "Меню")}},
+                        actions={
+                            IconButton({ }) { Icon(Icons.Filled.Info, contentDescription = "О приложении")}
+                            IconButton({ }) {Icon(Icons.Filled.Search, contentDescription = "Поиск")}
+                        },
+                        colors= TopAppBarDefaults.mediumTopAppBarColors(
+                                containerColor = Color(7, 95, 95,100),
+                                titleContentColor = Color.White,
+                                navigationIconContentColor = Color.White,
+                                actionIconContentColor = Color.White)
+                        )
+
+                },
+                containerColor = Color(17, 238, 238,100),
                 bottomBar = { BottomBar(navController = navController, tabs) }
             ) { innerPaddingModifier ->
                 AppNavGraph(
@@ -56,7 +83,8 @@ fun BottomBar(navController: NavController, tabs: Array<BottomTabs>) {
     val routes = remember { BottomTabs.values().map { it.route } }
     if (currentRoute in routes) {
         NavigationBar(
-            Modifier.navigationBarsHeight(additional = 56.dp)
+            Modifier.navigationBarsHeight(additional = 56.dp),
+            containerColor = Color(7, 95, 95,100)
         ) {
             tabs.forEach { tab ->
                 NavigationBarItem(
@@ -76,10 +104,10 @@ fun BottomBar(navController: NavController, tabs: Array<BottomTabs>) {
                     },
                     alwaysShowLabel = false,
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.White, // Icon color when selected
+                        selectedIconColor = Color.Gray, // Icon color when selected
                         unselectedIconColor = Color.White, // Icon color when not selected
-                        selectedTextColor = Color.White, // Label color when selected
-                        indicatorColor = Color(0xFF195334) // Highlight color for selected item
+                        selectedTextColor = Color.Transparent , // Label color when selected
+                        indicatorColor = Color(7, 95, 95,100)// Highlight color for selected item
                     )
                 )
             }
