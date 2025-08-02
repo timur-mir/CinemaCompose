@@ -1,5 +1,6 @@
 package home.product.skillcinema2.presentation
 
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -50,12 +51,10 @@ fun AppContent() {
             Scaffold(
                 topBar= {
                     TopAppBar(
-//                        modifier = Modifier.height(56.dp),
-                        title = { Text("Главная")},
+                        title = { Text("Skillcinema2")},
                         navigationIcon={ IconButton({ }) { Icon(Icons.Filled.Menu, contentDescription = "Меню")}},
                         actions={
                             IconButton({ }) { Icon(Icons.Filled.Info, contentDescription = "О приложении")}
-                            IconButton({ }) {Icon(Icons.Filled.Search, contentDescription = "Поиск")}
                         },
                         colors= TopAppBarDefaults.mediumTopAppBarColors(
                                 containerColor = Color(7, 95, 95,100),
@@ -104,10 +103,15 @@ fun BottomBar(navController: NavController, tabs: Array<BottomTabs>) {
                     },
                     alwaysShowLabel = false,
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.Gray, // Icon color when selected
-                        unselectedIconColor = Color.White, // Icon color when not selected
-                        selectedTextColor = Color.Transparent , // Label color when selected
-                        indicatorColor = Color(7, 95, 95,100)// Highlight color for selected item
+                        selectedIconColor = Color.Gray,
+                        unselectedIconColor = Color.White,
+                        selectedTextColor = Color.Transparent ,
+                        indicatorColor = Color(
+                            16,
+                            160,
+                            160,
+                            100
+                        )
                     )
                 )
             }

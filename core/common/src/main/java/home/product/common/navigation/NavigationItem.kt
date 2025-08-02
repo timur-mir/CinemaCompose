@@ -13,6 +13,11 @@ sealed class NavigationItem  (
         title = "Home",
         icon = R.drawable.ic_home
     )
+    object WebViewScreen : NavigationItem(
+        route = "web_screen",
+        title = "WebScreen",
+        icon = R.drawable.global
+    )
 
     object SearchScreen : NavigationItem(
         route = "search_screen",
@@ -23,5 +28,13 @@ sealed class NavigationItem  (
         route = "profile_screen",
         title = "Profile",
         icon = R.drawable.profile
+    )
+    object DetailMovieScreen: NavigationItem(
+        route = "detail_movie_screen",
+        title = "DetailMovie"
+    )
+    object TestScreen: NavigationItem(
+        route = "test_screen",
+        title = "Test"
     )
 }

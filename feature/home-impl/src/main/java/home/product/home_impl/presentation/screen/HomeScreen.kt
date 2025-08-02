@@ -2,6 +2,7 @@ package home.product.home_impl.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,8 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -41,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import home.product.common.navigation.NavigationItem
 
 import home.product.home_impl.domain.model.response.PremieresList
 import home.product.home_impl.presentation.screen.GlideImageWithPreview
@@ -48,36 +52,41 @@ import home.product.home_impl.presentation.screen.GlideImageWithPreview
 import home.product.home_impl.presentation.viewmodel.MovieViewModel
 
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier,
-    onNavigateTo: () -> Unit,
+    onNavigateTo: (String) -> Unit,
     movieViewModel: MovieViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    //val premieresList = remember { mutableStateOf<PremieresList>(PremieresList(emptyList())) }
     val premieresList: PremieresList by movieViewModel.premieresInfo.collectAsState()
-
+    val premieresList2: PremieresList by movieViewModel.premieresInfo2.collectAsState()
+    val premieresList3: PremieresList by movieViewModel.premieresInfo3.collectAsState()
+    val state = rememberScrollState()
 
     LaunchedEffect(Unit) {
-//       movieViewModel.premieresInfo.collect{list->
-//           listPremieres=list
-//       }
+        state.animateScrollTo(100)
         try {
             val data = coroutineScope.async {
                 movieViewModel.loadPremieres()
+                delay(180)
+                movieViewModel.loadPremieres2()
+                delay(180)
+                movieViewModel.loadPremieres3()
             }
             data
                 .await()
-
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
     }
     Surface(color = Color.Transparent) {
 
         Column(
+            modifier = Modifier
+            .verticalScroll(state),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -86,38 +95,54 @@ fun HomeScreen(
                 contentPadding = PaddingValues(10.dp)
             ){
                 items(premieresList.items.size) { index ->
-                    MovieItem(premieresList.items[index]) {}
+                    MovieItem(premieresList.items[index]) {id->
+                        onNavigateTo(NavigationItem.DetailMovieScreen.route + "/$id")
+                    }
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
-//            Spacer(modifier = Modifier.height(20.dp))
+
             LazyRow(modifier=Modifier.padding(0.dp,20.dp,0.dp,0.dp),
-                contentPadding = PaddingValues(10.dp),
-            reverseLayout = true){
-                items(premieresList.items.size) { index ->
-                    MovieItem(premieresList.items[index]) {}
+                contentPadding = PaddingValues(10.dp)
+            ){
+                items(premieresList2.items.size) { index ->
+                    MovieItem(premieresList2.items[index]) {id->
+                        onNavigateTo(NavigationItem.DetailMovieScreen.route + "/$id")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+            }
+
+            LazyRow(modifier=Modifier.padding(0.dp,20.dp,0.dp,0.dp),
+                contentPadding = PaddingValues(10.dp)
+            ){
+                items(premieresList3.items.size) { index ->
+                    MovieItem(premieresList3.items[index]) {id->
+                        onNavigateTo(NavigationItem.DetailMovieScreen.route + "/$id")
+                    }
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
 
         }
     }
+    Spacer(modifier = Modifier.height(160.dp))
 }
 
 @Composable
-fun MovieItem(movie: home.product.home_impl.data.remote.response.Movie, onClick: () -> Unit) {
+fun MovieItem(movie: home.product.home_impl.data.remote.response.Movie, onClick: (Int) -> Unit) {
     Card(
         shape = RoundedCornerShape(6.dp),
         colors =CardDefaults.cardColors(containerColor = Color(10,30,50,100), contentColor = Color.White),
         modifier = Modifier
             .height(220.dp)
             .width(130.dp)
+            .clickable(onClick = { onClick(movie.kinopoiskId) })
     ) {
         Row(
             modifier = Modifier
                 .height(220.dp)
                 .width(130.dp)
-                .clickable(onClick = onClick)
                 .padding(2.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -131,7 +156,6 @@ fun MovieItem(movie: home.product.home_impl.data.remote.response.Movie, onClick:
                     Modifier
                         .height(156.dp)
                         .width(130.dp)
-
                 )
                 Text(
                     text = movie.nameRu ?: "Фильм",

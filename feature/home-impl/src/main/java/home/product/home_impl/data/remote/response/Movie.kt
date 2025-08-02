@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Movie(
     @SerializedName("kinopoiskId")
     val kinopoiskId: Int,
@@ -26,16 +25,13 @@ data class Movie(
     var viewed: Boolean =false,
     @SerializedName("filmId")
     val filmId:Int
-
-): Parcelable
-@Parcelize
+)
 data class Genre(
     @SerializedName("genre")
     val genre: String?
-):Parcelable
+)
 
-@Parcelize
 data class Country(
     @SerializedName("country")
     val country: String?
-):Parcelable
+)
