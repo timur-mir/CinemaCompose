@@ -59,7 +59,7 @@ fun AppNavGraph(
             })
         )
         { it ->
-            it.arguments?.getInt("movieId")?.let { data ->
+            it.arguments?.getInt("movieWebId")?.let { data ->
                 WebViewScreen(
                     onNavigateTo = { navController.navigate(it) },
                     kinopoiskId = data

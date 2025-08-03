@@ -48,6 +48,7 @@ fun DetailMovieScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val filmDetailInfo: FilmDetailInfo by movieViewModel.filmDetailInfo.collectAsState()
+  
     val state = rememberScrollState()
     LaunchedEffect(Unit) {
         state.animateScrollTo(100)
@@ -60,6 +61,7 @@ fun DetailMovieScreen(
         }
     }
     Surface(color = Color(248, 64, 175, 100)) {
+
         Column(
             modifier = Modifier
                 .padding(10.dp)
