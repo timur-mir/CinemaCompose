@@ -33,7 +33,6 @@ fun AppNavGraph(
         )
         {
             HomeScreen(
-                modifier = modifier,
                 onNavigateTo = { navController.navigate(it) }
             )
         }

@@ -37,6 +37,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import home.product.common.navigation.NavigationItem
 import home.product.home_impl.domain.model.response.FilmDetailInfo
 import home.product.home_impl.domain.model.response.PremieresList
+import home.product.home_impl.presentation.viewmodel.FilmDetailViewModel
 import home.product.home_impl.presentation.viewmodel.MovieViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -44,17 +45,16 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun DetailMovieScreen(
-    modifier: Modifier, idMovie: Int, onNavigateTo: (String) -> Unit, movieViewModel: MovieViewModel = hiltViewModel()
+    modifier: Modifier, idMovie: Int, onNavigateTo: (String) -> Unit, filDetailViewModel: FilmDetailViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val filmDetailInfo: FilmDetailInfo by movieViewModel.filmDetailInfo.collectAsState()
-  
+    val filmDetailInfo: FilmDetailInfo by filDetailViewModel.filmDetailInfo.collectAsState()
     val state = rememberScrollState()
     LaunchedEffect(Unit) {
         state.animateScrollTo(100)
         try {
             val data = coroutineScope.async {
-                movieViewModel.getFilmDetailInfo(idMovie)
+                filDetailViewModel.getFilmDetailInfo(idMovie)
             }
             data.await()
         } catch (_: Exception) {
@@ -68,9 +68,8 @@ fun DetailMovieScreen(
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .clickable(onClick = {onNavigateTo(NavigationItem.WebViewScreen.route + "/${filmDetailInfo.kinopoiskId}") })
-                .verticalScroll(state)
-                .clip(shape = RoundedCornerShape(16.dp)),
-            verticalArrangement = Arrangement.Center,
+                .verticalScroll(state),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
@@ -87,8 +86,10 @@ fun DetailMovieScreen(
                 contentDescription = null,
                 modifier = modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(),
-                contentScale = ContentScale.FillHeight
+                    .fillMaxWidth()
+                    .padding(0.dp),
+                    alignment=Alignment.TopCenter,
+                contentScale = ContentScale.None
             )
             Spacer(modifier = Modifier.height(25.dp))
             Text(

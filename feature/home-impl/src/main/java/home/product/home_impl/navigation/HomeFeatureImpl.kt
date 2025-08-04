@@ -17,7 +17,6 @@ class HomeFeatureImpl : HomeFeatureApi {
     ) {
         navGraphBuilder.composable(baseRoute) {
             HomeScreen(
-                modifier = modifier,
                 onNavigateTo = {
                     navController.navigate("anyScreen")
                 }

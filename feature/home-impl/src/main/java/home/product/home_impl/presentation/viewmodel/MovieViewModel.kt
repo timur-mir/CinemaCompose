@@ -27,8 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieViewModel @Inject constructor(
     private val getPremieresUseCase: PremieresUseCase,
-    private val getFilmDetailInfoUseCase: FilmDetailInfoUseCase,
-    private val getWebViewUseCase: WebViewUseCase
+    private val getPremieres2UseCase: PremieresUseCase,
+    private val getPremieres3UseCase: PremieresUseCase
 ) : ViewModel() {
     private var downloader: Job? = null
     private val _isLoading = MutableStateFlow(false)
@@ -39,61 +39,8 @@ class MovieViewModel @Inject constructor(
     val premieresInfo2: StateFlow<PremieresList> = _premieresInfo2.asStateFlow()
     private val _premieresInfo3 = MutableStateFlow<PremieresList>(PremieresList(emptyList()))
     val premieresInfo3: StateFlow<PremieresList> = _premieresInfo3.asStateFlow()
-    private val _moveNetList =
-        MutableStateFlow<FilmPresentOnNetPlatform>(FilmPresentOnNetPlatform(0))
-    val moveNetList: StateFlow<FilmPresentOnNetPlatform> = _moveNetList.asStateFlow()
-
-    private val _filmDetailInfo = MutableStateFlow<FilmDetailInfo>(
-        FilmDetailInfo(
-            462654,
-            "tt1226837",
-            "Красивый мальчик",
-            "Beautiful Boy",
-            2018,
-            "https://kinopoiskapiunofficial.tech/images/posters/kp/462654.jpg",
-            arrayListOf(Genre("драма"), Genre("биография")),
-            "7.3",
-            120,
-            "18+",
-            false,
-            arrayListOf(Country("Сша")),
-            " Дэвид Шефф переживает трагедию: его милый и очаровательный сын Ник стал" +
-                    "наркоманом. Откуда взялась пагубная привычка? Ник растёт в любящей семье, он" +
-                    " отлично учится, ни в чём не нуждается. Развод родителей прошёл спокойно." +
-                    "С матерью, живущей в Лос-Анджелесе Ник общается до сих пор." +
-                    " Пытаясь найти ответы, Дэвид вспоминает, каким ребёнок был раньше — вдумчивым" +
-                    " и красивым мальчиком.",
-            "FILM"
-        )
-    )
-    val filmDetailInfo: StateFlow<FilmDetailInfo> = _filmDetailInfo.asStateFlow()
-
-    init {
-    }
-
-fun getMoviesUrlFromNet(filmId:Int){
-    viewModelScope.launch(Dispatchers.IO) {
-        kotlin.runCatching {
-           getWebViewUseCase.getMoreUrlFilmOnNet(filmId)
-
-        }.fold(
-            onSuccess = { _moveNetList.value = it },
-            onFailure = { Log.d("GetFilmNet", it.message ?: "") }
-        )
-    }
-}
-    fun getFilmDetailInfo(filmId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                getFilmDetailInfoUseCase.getFilmById(filmId)
-
-            }.fold(
-                onSuccess = { _filmDetailInfo.value = it },
-                onFailure = { Log.d("GetFilmDetailInfoViewModel", it.message ?: "") }
-            )
-        }
-    }
-
+    private val _premieresInfo4 = MutableStateFlow<PremieresList>(PremieresList(emptyList()))
+    val premieresInfo4: StateFlow<PremieresList> = _premieresInfo4.asStateFlow()
     fun loadPremieres() {
         downloader ?: viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
@@ -117,7 +64,7 @@ fun getMoviesUrlFromNet(filmId:Int){
         downloader ?: viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
                 _isLoading.value = true
-                getPremieresUseCase.getPremieres(2025, "september")
+                getPremieres2UseCase.getPremieres(2025, "september")
             }.fold(
                 onSuccess = { response ->
                     _premieresInfo2.value = response
@@ -131,15 +78,33 @@ fun getMoviesUrlFromNet(filmId:Int){
             downloader = null
         }
     }
-
     fun loadPremieres3() {
+        downloader ?: viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                _isLoading.value = true
+                getPremieres3UseCase.getPremieres(2025, "october")
+            }.fold(
+                onSuccess = { response ->
+                    _premieresInfo3.value = response
+                },
+                onFailure = {
+                    Log.d("JJJ", it.message ?: "")
+                }
+            )
+            _isLoading.value = false
+            downloader?.cancel()
+            downloader = null
+        }
+    }
+
+    fun loadPremieres4() {
         downloader ?: viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
                 _isLoading.value = true
                 getPremieresUseCase.getPremieres(2025, "november")
             }.fold(
                 onSuccess = { response ->
-                    _premieresInfo3.value = response
+                    _premieresInfo4.value = response
                 },
                 onFailure = {
                     Log.d("JJR", it.message ?: "")

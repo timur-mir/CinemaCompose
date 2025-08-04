@@ -17,7 +17,7 @@ fun GlideImageWithPreview(
     data: Any?,
     modifier: Modifier? = null,
     contentDescription: String? = null,
-    contentScale: ContentScale = ContentScale.Fit
+    contentScale: ContentScale = ContentScale.FillBounds
 ) {
     if (data == null)
         Image(

@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import home.product.home_impl.domain.model.response.FilmPresentOnNetPlatform
 import home.product.home_impl.domain.model.response.PremieresList
 import home.product.home_impl.presentation.screen.Url.urlWeb
+import home.product.home_impl.presentation.viewmodel.GetNetUrlViewModel
 import home.product.home_impl.presentation.viewmodel.MovieViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -34,21 +35,20 @@ import kotlinx.coroutines.launch
 fun WebViewScreen(
     kinopoiskId: Int,
     onNavigateTo: (String) -> Unit,
-    movieViewModel: MovieViewModel = hiltViewModel()
+    getNetUrlViewModel: GetNetUrlViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val moviesFromNet: FilmPresentOnNetPlatform by movieViewModel.moveNetList.collectAsState()
+    val moviesFromNet: FilmPresentOnNetPlatform by getNetUrlViewModel.moveNetList.collectAsState()
     // val urlMain = remember { mutableStateOf("https://www.google.com") }
     LaunchedEffect(Unit) {
-
         try {
             val data = coroutineScope.async(Dispatchers.IO) {
-                movieViewModel.getMoviesUrlFromNet(kinopoiskId)
+                getNetUrlViewModel.getMoviesUrlFromNet(kinopoiskId)
             }
             data
                 .await()
             delay(200)
-            movieViewModel.moveNetList.collect {
+            getNetUrlViewModel.moveNetList.collect {
                 urlWeb = it.items[1].url.toString()
             }
         } catch (_: Exception) {
@@ -70,13 +70,10 @@ fun WebViewScreen(
                     settings.builtInZoomControls = true
                     settings.displayZoomControls = true
                     settings.textZoom = 100
-
                     settings.loadWithOverviewMode = true
                     settings.useWideViewPort = true
-
                     fitsSystemWindows = true
                     setLayerType(View.LAYER_TYPE_HARDWARE, null)
-
                 }
             },
             update = { webView ->
@@ -86,12 +83,10 @@ fun WebViewScreen(
                     webView.loadUrl("https://kinopoiskapiunofficial.tech/documentation/api/#/films/get_api_v2_2_films__id__external_sources")
                     //Ограничение на запрос...Code - 429...???
                 }
-
             }
         )
     }
 }
-
 object Url {
     var urlWeb = ""
 }

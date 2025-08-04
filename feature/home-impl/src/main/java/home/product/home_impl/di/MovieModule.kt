@@ -9,6 +9,8 @@ import home.product.home_impl.data.repository.MovieRepositoryImpl
 import home.product.home_impl.domain.model.response.FilmPresentOnNetPlatform
 import home.product.home_impl.domain.repository.MovieRepository
 import home.product.home_impl.domain.usecase.FilmDetailInfoUseCase
+import home.product.home_impl.domain.usecase.Premieres2UseCase
+import home.product.home_impl.domain.usecase.Premieres3UseCase
 import home.product.home_impl.domain.usecase.PremieresUseCase
 import home.product.home_impl.domain.usecase.WebViewUseCase
 import retrofit2.Retrofit
@@ -34,6 +36,16 @@ class MovieModule {
     @Singleton
     fun providePremieresUseCase(repository: MovieRepository): PremieresUseCase {
         return PremieresUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun providePremieres2UseCase(repository: MovieRepository): Premieres2UseCase {
+        return Premieres2UseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun providePremieres3UseCase(repository: MovieRepository): Premieres3UseCase {
+        return Premieres3UseCase(repository)
     }
     @Provides
     @Singleton

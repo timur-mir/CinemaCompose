@@ -9,6 +9,8 @@ import retrofit2.http.Path
 
 interface MovieRepository {
     suspend fun getPremieres(year:Int,month:String):PremieresList
+    suspend fun getPremieres2(year:Int,month:String):PremieresList
+    suspend fun getPremieres3(year:Int,month:String):PremieresList
     suspend fun getFilmById(@Path("id") id: Int): FilmDetailInfo
     suspend fun getMoreUrlFilmOnNet( @Path("id") filmId: Int): FilmPresentOnNetPlatform
 }

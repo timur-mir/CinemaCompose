@@ -50,14 +50,14 @@ import home.product.home_impl.domain.model.response.PremieresList
 import home.product.home_impl.presentation.screen.GlideImageWithPreview
 
 import home.product.home_impl.presentation.viewmodel.MovieViewModel
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier,
     onNavigateTo: (String) -> Unit,
     movieViewModel: MovieViewModel = hiltViewModel()
 ) {
@@ -71,11 +71,9 @@ fun HomeScreen(
         state.animateScrollTo(100)
         try {
             val data = coroutineScope.async {
-                movieViewModel.loadPremieres()
-                delay(180)
-                movieViewModel.loadPremieres2()
-                delay(180)
-                movieViewModel.loadPremieres3()
+                coroutineScope.launch(Dispatchers.IO) {  movieViewModel.loadPremieres() }
+                coroutineScope.launch(Dispatchers.IO) {  movieViewModel.loadPremieres2() }
+                coroutineScope.launch(Dispatchers.IO) {  movieViewModel.loadPremieres3() }
             }
             data
                 .await()
@@ -83,102 +81,113 @@ fun HomeScreen(
         }
     }
     Surface(color = Color.Transparent) {
-
         Column(
             modifier = Modifier
-            .verticalScroll(state),
+                .verticalScroll(state),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center
         ) {
             Spacer(modifier = Modifier.height(40.dp))
-            LazyRow(modifier=Modifier.padding(0.dp,30.dp,0.dp,0.dp),
-                contentPadding = PaddingValues(10.dp)
-            ){
+            LazyRow(
+                modifier = Modifier.padding(0.dp, 30.dp, 0.dp, 0.dp),
+                contentPadding = PaddingValues(2.dp)
+            ) {
                 items(premieresList.items.size) { index ->
-                    MovieItem(premieresList.items[index]) {id->
+                    MovieItem(premieresList.items[index]) { id ->
                         onNavigateTo(NavigationItem.DetailMovieScreen.route + "/$id")
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
 
-            LazyRow(modifier=Modifier.padding(0.dp,20.dp,0.dp,0.dp),
+            LazyRow(
+                modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
                 contentPadding = PaddingValues(10.dp)
-            ){
+            ) {
                 items(premieresList2.items.size) { index ->
-                    MovieItem(premieresList2.items[index]) {id->
+                    MovieItem(premieresList2.items[index]) { id ->
                         onNavigateTo(NavigationItem.DetailMovieScreen.route + "/$id")
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
 
-            LazyRow(modifier=Modifier.padding(0.dp,20.dp,0.dp,0.dp),
+            LazyRow(
+                modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
                 contentPadding = PaddingValues(10.dp)
-            ){
+            ) {
                 items(premieresList3.items.size) { index ->
-                    MovieItem(premieresList3.items[index]) {id->
+                    MovieItem(premieresList3.items[index]) { id ->
                         onNavigateTo(NavigationItem.DetailMovieScreen.route + "/$id")
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
 
+            Spacer(modifier = Modifier.height(160.dp))
         }
     }
-    Spacer(modifier = Modifier.height(160.dp))
 }
 
 @Composable
 fun MovieItem(movie: home.product.home_impl.data.remote.response.Movie, onClick: (Int) -> Unit) {
     Card(
         shape = RoundedCornerShape(6.dp),
-        colors =CardDefaults.cardColors(containerColor = Color(10,30,50,100), contentColor = Color.White),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(10, 30, 50, 100),
+            contentColor = Color.White
+        ),
         modifier = Modifier
+            .padding(0.dp, 4.dp, 0.dp, 0.dp)
             .height(220.dp)
             .width(130.dp)
             .clickable(onClick = { onClick(movie.kinopoiskId) })
     ) {
-        Row(
+
+        Column(
             modifier = Modifier
                 .height(220.dp)
                 .width(130.dp)
-                .padding(2.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+                .padding(6.dp, 6.dp, 6.dp, 2.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top
 
-            Column(
-            ) {
-                GlideImageWithPreview(
-                    data = movie.posterUrl ?: movie.posterUrlPreview
-                    ?: "${home.product.common.R.drawable.fotosimple}",
-                    Modifier
-                        .height(156.dp)
-                        .width(130.dp)
-                )
-                Text(
-                    text = movie.nameRu ?: "Фильм",
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontSize = 12.sp,
-                        color = Color.White
-                    )
-                )
-                Text(
-                    text = "${movie.genres?.get(0)?.genre}",
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontSize = 10.sp,
-                        color = Color.White
-                    )
-                )
-            }
+        ) {
+            GlideImageWithPreview(
+                data = movie.posterUrlPreview ?: movie.posterUrl
+                ?: "${home.product.common.R.drawable.fotosimple}",
+                Modifier
+                    .height(156.dp)
+                    .width(130.dp)
+            )
+            Text(
+                modifier = Modifier
+                    .padding(4.dp, 2.dp, 2.dp, 0.dp),
+                text = movie.nameRu ?: "Фильм",
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 12.sp,
+                    color = Color.White
+                ),
+                maxLines = 2
+            )
+            Text(
+                modifier = Modifier
+                    .padding(4.dp, 2.dp, 2.dp, 0.dp),
+                text = "${movie.genres?.get(0)?.genre}",
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 10.sp,
+                    color = Color.White
+                ),
+                maxLines = 1
+            )
         }
     }
 }
+
 
 
 

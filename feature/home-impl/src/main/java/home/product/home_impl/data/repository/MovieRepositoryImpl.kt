@@ -19,6 +19,15 @@ class MovieRepositoryImpl(
     override suspend fun getPremieres(year: Int, month: String): PremieresList {
         return api.premieres(year, month).toDomainPremieresList()
     }
+
+    override suspend fun getPremieres2(year: Int, month: String): PremieresList {
+        return api.premieres2(year, month).toDomainPremieresList()
+    }
+
+    override suspend fun getPremieres3(year: Int, month: String): PremieresList {
+        return api.premieres3(year, month).toDomainPremieresList()
+    }
+
     override suspend fun getFilmById(@Path("id") id: Int): FilmDetailInfo {
         return api.getFilmById(id)
     }

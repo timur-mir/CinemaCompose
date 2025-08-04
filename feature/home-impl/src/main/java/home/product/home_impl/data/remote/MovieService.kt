@@ -13,9 +13,14 @@ interface MovieService {
     @Headers("X-API-KEY: $api_key")
     @GET("/api/v2.2/films/premieres")
     suspend fun premieres(@Query("year") year: Int, @Query("month") month: String): PremieresList
-    private companion object {
-        private const val api_key = "ce993e3d-935a-4c1c-ba3e-dacd2537cb3c"
-    }
+
+    @Headers("X-API-KEY: $api_key")
+    @GET("/api/v2.2/films/premieres")
+    suspend fun premieres2(@Query("year") year: Int, @Query("month") month: String): PremieresList
+
+    @Headers("X-API-KEY: $api_key")
+    @GET("/api/v2.2/films/premieres")
+    suspend fun premieres3(@Query("year") year: Int, @Query("month") month: String): PremieresList
 
     @Headers("X-API-KEY: $api_key")
     @GET("/api/v2.2/films/{id}")
@@ -25,4 +30,8 @@ interface MovieService {
     suspend fun getMoreUrlFilmOnNet(
         @Path("id") filmId: Int
     ): FilmPresentOnNetPlatform
+
+    private companion object {
+        private const val api_key = "ce993e3d-935a-4c1c-ba3e-dacd2537cb3c"
+    }
 }
