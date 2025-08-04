@@ -81,7 +81,7 @@ fun DetailMovieScreen(
         ) {
             Spacer(modifier = Modifier.height(62.dp))
             Text(
-                text = filmDetailInfo.nameRu.toString(),
+                text = filmDetailInfo.nameRu?:filmDetailInfo.nameOriginal?:"",
                 modifier = Modifier.padding(4.dp),
                 color = Color.White,
                 textAlign = TextAlign.Center,
@@ -103,7 +103,7 @@ fun DetailMovieScreen(
             Spacer(modifier = Modifier.height(25.dp))
             if (filmDetailInfo.description != null) {
                 Text(
-                    text = filmDetailInfo.description.toString(),
+                    text = filmDetailInfo.description?:"",
                     modifier = Modifier.padding(16.dp),
                     color = Color.White,
                     textAlign = TextAlign.Center,

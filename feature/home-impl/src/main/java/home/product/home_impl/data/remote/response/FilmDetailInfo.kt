@@ -8,9 +8,9 @@ data class FilmDetailInfo(
     @SerializedName("kinopoiskId")
     val kinopoiskId: Int,
     @SerializedName("imdbId")
-    val imdbId:String,
+    val imdbId:String?,
     @SerializedName("nameRu")
-    val nameRu: String,
+    val nameRu: String?,
     @SerializedName("nameOriginal")
     val nameOriginal:String?,
     @SerializedName("year")

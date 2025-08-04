@@ -89,7 +89,7 @@ fun HomeScreen(
         ) {
             Spacer(modifier = Modifier.height(40.dp))
             LazyRow(
-                modifier = Modifier.padding(0.dp, 30.dp, 0.dp, 0.dp),
+                modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
                 contentPadding = PaddingValues(2.dp)
             ) {
                 items(premieresList.items.size) { index ->
@@ -102,7 +102,7 @@ fun HomeScreen(
 
             LazyRow(
                 modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
-                contentPadding = PaddingValues(10.dp)
+                contentPadding = PaddingValues(2.dp)
             ) {
                 items(premieresList2.items.size) { index ->
                     MovieItem(premieresList2.items[index]) { id ->
@@ -114,7 +114,7 @@ fun HomeScreen(
 
             LazyRow(
                 modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
-                contentPadding = PaddingValues(10.dp)
+                contentPadding = PaddingValues(2.dp)
             ) {
                 items(premieresList3.items.size) { index ->
                     MovieItem(premieresList3.items[index]) { id ->
