@@ -25,12 +25,14 @@ data class FilmDetailInfo(
     val filmLength:Int,
     @SerializedName("ratingAgeLimits")
     val ratingAgeLimits:String,
+    @SerializedName("webUrl")
+    val webUrl:String?,
     @SerializedName("serial")
     val serial:Boolean,
     @SerializedName("countries")
     val countries:ArrayList<Country>?,
     @SerializedName("description")
-    val description:String,
+    val description:String?,
     @SerializedName("type")
     val type:String
 )

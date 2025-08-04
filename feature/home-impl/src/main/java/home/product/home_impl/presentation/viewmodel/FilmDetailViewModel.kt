@@ -16,11 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FilmDetailViewModel@Inject constructor(private val getFilmDetailInfoUseCase: FilmDetailInfoUseCase): ViewModel() {
-    private var downloader: Job? = null
-    var filmDetailInfoInit: FilmDetailInfo = FilmDetailInfo(
-        0, "", "",
-        "", 0, "", genres = ArrayList(), "", 0,
-        "", false, countries = ArrayList(), "", ""
+    private var filmDetailInfoInit: FilmDetailInfo = FilmDetailInfo(
+        kinopoiskId = 0, imdbId = "", nameRu = "",
+        nameOriginal = "", year = 0, "", genres = ArrayList(), ratingImdb = "", webUrl = "",
+        filmLength = 0, ratingAgeLimits = "", countries = ArrayList(), serial = false, description = "", type=""
     )
     private val _filmDetailInfo = MutableStateFlow<FilmDetailInfo>(filmDetailInfoInit)
     val filmDetailInfo: StateFlow<FilmDetailInfo> = _filmDetailInfo.asStateFlow()

@@ -13,11 +13,12 @@ data class FilmDetailInfo(
     val posterUrlPreview: String,
     val genres: ArrayList<Genre>?,
     val ratingImdb:String?,
+    val webUrl:String?,
     val filmLength:Int,
     val ratingAgeLimits:String,
     val serial:Boolean,
     val countries:ArrayList<Country>?,
-    val description:String,
+    val description:String?,
     val type:String
 
 ): Parcelable

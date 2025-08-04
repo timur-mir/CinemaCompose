@@ -1,5 +1,8 @@
 package home.product.home_impl.presentation.screen
 
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
+import android.widget.TextView
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,9 +32,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.util.LinkifyCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -67,7 +74,6 @@ fun DetailMovieScreen(
                 .padding(10.dp)
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .clickable(onClick = {onNavigateTo(NavigationItem.WebViewScreen.route + "/${filmDetailInfo.kinopoiskId}") })
                 .verticalScroll(state),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -85,21 +91,44 @@ fun DetailMovieScreen(
                 model = filmDetailInfo.posterUrlPreview,
                 contentDescription = null,
                 modifier = modifier
+                    .height(520.dp)
+                    .width(400.dp)
                     .fillMaxHeight()
                     .fillMaxWidth()
-                    .padding(0.dp),
-                    alignment=Alignment.TopCenter,
+                    .padding(0.dp)
+                    .clickable(onClick = { onNavigateTo(NavigationItem.WebViewScreen.route + "/${filmDetailInfo.kinopoiskId}") }),
+                alignment = Alignment.TopCenter,
                 contentScale = ContentScale.None
             )
             Spacer(modifier = Modifier.height(25.dp))
-            Text(
-                text = filmDetailInfo.description.toString(),
-                modifier = Modifier.padding(16.dp),
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                fontSize = 18.sp
-            )
+            if (filmDetailInfo.description != null) {
+                Text(
+                    text = filmDetailInfo.description.toString(),
+                    modifier = Modifier.padding(16.dp),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 18.sp
+                )
+                Spacer(modifier = Modifier.height(25.dp))
+                DefaultLinkifyText(  modifier = modifier,filmDetailInfo.webUrl)
+
+            } else {
+                DefaultLinkifyText(  modifier = modifier,filmDetailInfo.webUrl)
+            }
         }
     }
-
+}
+@Composable
+fun DefaultLinkifyText(modifier: Modifier = Modifier, text: String?) {
+    val context = LocalContext.current
+    val customLinkifyTextView = remember {
+        TextView(context)
+    }
+    AndroidView(modifier = modifier, factory = { customLinkifyTextView }) { textView ->
+        textView.text = text ?: ""
+        LinkifyCompat.addLinks(textView, Linkify.WEB_URLS)
+//        Linkify.addLinks(textView, Patterns.PHONE,"tel:",
+//            Linkify.sPhoneNumberMatchFilter, Linkify.sPhoneNumberTransformFilter)
+        textView.movementMethod = LinkMovementMethod.getInstance()
+    }
 }

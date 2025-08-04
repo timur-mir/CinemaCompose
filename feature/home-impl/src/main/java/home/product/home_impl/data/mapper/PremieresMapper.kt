@@ -32,6 +32,7 @@ fun FilmPresentOnNetPlatform.toDomainFilmPresentOnNetPlatform(): home.product.ho
             posterUrlPreview = this.posterUrlPreview,
             genres = this.genres?.map { it->Genre(it.genre.toString())  } as ArrayList<home.product.home_impl.domain.model.response.Genre>,
             ratingImdb=this.ratingImdb,
+            webUrl = this.webUrl,
             filmLength = this.filmLength,
             ratingAgeLimits = this.ratingAgeLimits,
             serial = this.serial,

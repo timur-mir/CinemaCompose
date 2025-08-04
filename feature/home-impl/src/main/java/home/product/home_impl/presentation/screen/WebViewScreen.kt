@@ -23,7 +23,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import home.product.home_impl.domain.model.response.FilmPresentOnNetPlatform
 import home.product.home_impl.domain.model.response.PremieresList
-import home.product.home_impl.presentation.screen.Url.urlWeb
+import home.product.home_impl.presentation.screen.UrlEx.urlWeb
 import home.product.home_impl.presentation.viewmodel.GetNetUrlViewModel
 import home.product.home_impl.presentation.viewmodel.MovieViewModel
 import kotlinx.coroutines.Dispatchers
@@ -87,6 +87,6 @@ fun WebViewScreen(
         )
     }
 }
-object Url {
+object UrlEx {
     var urlWeb = ""
 }
