@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 data class FilmDetailInfo(
     @SerializedName("kinopoiskId")
-    val kinopoiskId: Int,
+    val kinopoiskId: Int?,
     @SerializedName("imdbId")
     val imdbId:String?,
     @SerializedName("nameRu")
@@ -14,17 +14,17 @@ data class FilmDetailInfo(
     @SerializedName("nameOriginal")
     val nameOriginal:String?,
     @SerializedName("year")
-    val year:Int,
+    val year:Int?,
     @SerializedName("posterUrlPreview")
-    val posterUrlPreview: String,
+    val posterUrlPreview: String?,
     @SerializedName("genres")
     val genres: ArrayList<home.product.home_impl.data.remote.response.Genre>?,
     @SerializedName("ratingImdb")
     val ratingImdb:String?,
     @SerializedName("filmLength")
-    val filmLength:Int,
+    val filmLength:Int?,
     @SerializedName("ratingAgeLimits")
-    val ratingAgeLimits:String,
+    val ratingAgeLimits:String?,
     @SerializedName("webUrl")
     val webUrl:String?,
     @SerializedName("serial")
@@ -34,5 +34,5 @@ data class FilmDetailInfo(
     @SerializedName("description")
     val description:String?,
     @SerializedName("type")
-    val type:String
+    val type:String?
 )

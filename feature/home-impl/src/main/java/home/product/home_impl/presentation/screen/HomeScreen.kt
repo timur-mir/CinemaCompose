@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import home.product.common.database.PremieresEntity
 import home.product.common.navigation.NavigationItem
 
 import home.product.home_impl.domain.model.response.PremieresList
@@ -66,7 +67,7 @@ fun HomeScreen(
     val premieresList2: PremieresList by movieViewModel.premieresInfo2.collectAsState()
     val premieresList3: PremieresList by movieViewModel.premieresInfo3.collectAsState()
     val state = rememberScrollState()
-
+    var premieresListForDao: MutableList<PremieresEntity> = mutableListOf()
     LaunchedEffect(Unit) {
         state.animateScrollTo(100)
         try {
@@ -97,6 +98,31 @@ fun HomeScreen(
                         onNavigateTo(NavigationItem.DetailMovieScreen.route + "/$id")
                     }
                     Spacer(modifier = Modifier.width(8.dp))
+                }
+                coroutineScope.launch {
+
+                    if (premieresList.items.isNotEmpty()) {
+                        for (item in premieresList.items) {
+                            premieresListForDao.add(
+                                PremieresEntity(
+                                    item.kinopoiskId,
+                                    item.nameRu,
+                                    item.posterUrl,
+                                    item.posterUrlPreview,
+                                    item.genres?.joinToString(",") { it.genre.toString() }
+                                        .toString(),
+                                    item.premiereRu,
+                                    item.countries?.joinToString(",") { it.country.toString() }
+                                        .toString(),
+                                    item.rating.toString(),
+                                    item.viewed,
+                                    item.filmId
+                                )
+                            )
+                        }
+                        movieViewModel.savePremieresToDao(premieresListForDao)
+                    }
+
                 }
             }
 

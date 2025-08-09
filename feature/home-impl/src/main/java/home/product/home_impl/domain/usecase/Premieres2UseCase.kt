@@ -9,4 +9,5 @@ class Premieres2UseCase(
     suspend fun getPremieres(year: Int, month: String): PremieresList {
         return repository.getPremieres(year, month)
     }
+
 }

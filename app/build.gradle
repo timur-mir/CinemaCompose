@@ -73,6 +73,16 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
     implementation "com.google.accompanist:accompanist-insets:0.18.0"
 
+    // Room
+    implementation "androidx.room:room-runtime:2.6.1"
+    kapt "androidx.room:room-compiler:2.6.1"
+    implementation "androidx.room:room-ktx:2.6.1"
+
+    // Jetpack Compose + ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0"
+    implementation "androidx.compose.runtime:runtime-livedata:1.6.4"
+
+
     def lifecycle_version = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation("com.github.bumptech.glide:glide:4.16.0")

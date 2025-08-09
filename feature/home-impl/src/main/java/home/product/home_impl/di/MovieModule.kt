@@ -4,13 +4,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import home.product.common.database.PremieresRepository
 import home.product.home_impl.data.remote.MovieService
 import home.product.home_impl.data.repository.MovieRepositoryImpl
-import home.product.home_impl.domain.model.response.FilmPresentOnNetPlatform
 import home.product.home_impl.domain.repository.MovieRepository
 import home.product.home_impl.domain.usecase.FilmDetailInfoUseCase
 import home.product.home_impl.domain.usecase.Premieres2UseCase
 import home.product.home_impl.domain.usecase.Premieres3UseCase
+import home.product.home_impl.domain.usecase.PremieresLoadFromDaoUseCase
+import home.product.home_impl.domain.usecase.PremieresSaveToDaoUseCase
 import home.product.home_impl.domain.usecase.PremieresUseCase
 import home.product.home_impl.domain.usecase.WebViewUseCase
 import retrofit2.Retrofit
@@ -28,8 +30,18 @@ class MovieModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(api: MovieService): MovieRepository {
-        return MovieRepositoryImpl(api)
+    fun provideMovieRepository(api: MovieService,premieresRepository: PremieresRepository): MovieRepository {
+        return MovieRepositoryImpl(api,premieresRepository)
+    }
+    @Provides
+    @Singleton
+    fun providePremieresSaveToDao(repository: MovieRepository):PremieresSaveToDaoUseCase{
+        return PremieresSaveToDaoUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun providePremieresLoadFromDao(repository: MovieRepository):PremieresLoadFromDaoUseCase{
+        return PremieresLoadFromDaoUseCase(repository)
     }
 
     @Provides
